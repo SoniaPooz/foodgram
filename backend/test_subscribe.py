@@ -17,7 +17,8 @@ if response.status_code == 200:
         print(f"Автор для подписки: {author_username}")
 
         print("2. ПОДПИСЫВАЕМСЯ НА ДРУГОГО АВТОРА")
-        response = requests.post(f"{BASE_URL}/{author_username}/subscribe/", headers=headers)
+        response = requests.post(f"{BASE_URL}/{author_username}/subscribe/",
+                                 headers=headers)
         print("Статус:", response.status_code)
         if response.status_code == 201:
             print("Успешно подписались!")
@@ -36,7 +37,8 @@ if response.status_code == 200:
             print(f"Количество подписок: {len(results)}")
 
         print("4. ОТПИСЫВАЕМСЯ ОТ АВТОРА")
-        response = requests.delete(f"{BASE_URL}/{author_username}/subscribe/", headers=headers)
+        response = requests.delete(f"{BASE_URL}/{author_username}/subscribe/",
+                                   headers=headers)
         print("Статус:", response.status_code)
         if response.status_code == 204:
             print("Успешно отписались!")

@@ -11,17 +11,19 @@ if response.status_code == 200:
     if recipes:
         recipe_id = recipes[0]['id']
         print(f"Found recipe ID: {recipe_id}")
- 
+
         # Добавить в избранное
         print("\n=== ADD TO FAVORITE ===")
-        response = requests.post(f"{BASE_URL}/{recipe_id}/favorite/", headers=headers)
+        response = requests.post(f"{BASE_URL}/{recipe_id}/favorite/",
+                                 headers=headers)
         print("Status:", response.status_code)
         if response.status_code in [200, 201]:
             print("Response:", response.json())
 
         # Удалить из избранного
         print("\n=== DELETE FROM FAVORITE ===")
-        response = requests.delete(f"{BASE_URL}/{recipe_id}/favorite/", headers=headers)
+        response = requests.delete(f"{BASE_URL}/{recipe_id}/favorite/",
+                                   headers=headers)
         print("Status:", response.status_code)
     else:
         print("No recipes found!")

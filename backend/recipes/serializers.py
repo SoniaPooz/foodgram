@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import Tag, Ingredient, Recipe, RecipeIngredient, Favorite, ShoppingCart
-
+from .models import (
+    Tag, Ingredient, Recipe, RecipeIngredient, Favorite, ShoppingCart
+)
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -82,7 +83,7 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
             context={'request': self.context.get('request')}
         ).data
 
-  
+
 class RecipeShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe

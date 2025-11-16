@@ -10,7 +10,7 @@ print("1. ОСНОВНЫЕ ЭНДПОИНТЫ API:")
 endpoints = [
     ("Рецепты", "/recipes/"),
     ("Теги", "/tags/"),
-    ("Ингредиенты", "/ingredients/"), 
+    ("Ингредиенты", "/ingredients/"),
     ("Пользователи", "/users/"),
     ("Подписки", "/users/subscriptions/"),
 ]
@@ -23,7 +23,7 @@ for name, endpoint in endpoints:
         response = requests.get(f"{BASE_URL}{endpoint}", headers=headers, timeout=10)
         end_time = time.time()
         response_time = (end_time - start_time) * 1000
-        
+
         if response.status_code == 200:
             print(f"  {name}: РАБОТАЕТ ({response_time:.1f} мс)")
         else:
@@ -54,13 +54,13 @@ print("\n3. ПРОИЗВОДИТЕЛЬНОСТЬ:")
 response = requests.get(f"{BASE_URL}/recipes/", headers=headers)
 if response.status_code == 200:
     data = response.json()
-    print(f"  Рецептов в системе: {len(data.get('results', []))}")
-    print(f"  Ингредиентов в базе: 2186")
-    print(f"  Среднее время ответа: < 50 мс")
+    print(f" Рецептов в системе: {len(data.get('results', []))}")
+    print(" Ингредиентов в базе: 2186")
+    print(" Среднее время ответа: < 50 мс")
 
-print("\n" + "="*50)
+print("\n" + "=" * 50)
 print("FOODGRAM УСПЕШНО ЗАВЕРШЕН И ГОТОВ К ИСПОЛЬЗОВАНИЮ!")
-print("="*50)
+print("=" * 50)
 
 print("\nВСЕ ОСНОВНЫЕ ФУНКЦИИ РЕАЛИЗОВАНЫ:")
 print("- Бэкенд API на Django REST Framework")

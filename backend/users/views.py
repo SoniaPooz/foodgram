@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -20,7 +20,7 @@ class UserViewSet(DjoserUserViewSet):
     def subscribe(self, request, username=None):
         from django.contrib.auth import get_user_model
         User = get_user_model()
-        
+
         try:
             author = User.objects.get(username=username)
         except User.DoesNotExist:
@@ -35,7 +35,7 @@ class UserViewSet(DjoserUserViewSet):
                     {'errors': 'Нельзя подписаться на себя'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            
+
             subscribe, created = Subscribe.objects.get_or_create(
                 user=request.user,
                 author=author

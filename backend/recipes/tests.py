@@ -1,10 +1,10 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
-from .models import Recipe, Ingredient, Tag, Favorite, ShoppingCart
+from .models import Recipe, Ingredient
 
 User = get_user_model()
+
 
 class RecipeAPITestCase(APITestCase):
     def setUp(self):
@@ -98,7 +98,7 @@ class UserAPITestCase(APITestCase):
             password='testpass123'
         )
         self.user2 = User.objects.create_user(
-            username='user2', 
+            username='user2',
             email='user2@example.com',
             password='testpass123'
         )

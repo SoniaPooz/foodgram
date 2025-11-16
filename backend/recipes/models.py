@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class Tag(models.Model):
     name = models.CharField('Название', max_length=200, unique=True)
     color = models.CharField('Цвет в HEX', max_length=7, unique=True)

@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from .models import Tag, Ingredient, Recipe, Favorite, ShoppingCart
 from .serializers import (
     TagSerializer, IngredientSerializer, RecipeSerializer,
-    FavoriteSerializer, ShoppingCartSerializer
+    ShoppingCartSerializer
 )
 from .filters import RecipeFilter, IngredientFilter
 
@@ -39,7 +39,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Оптимизированный queryset с prefetch_related и select_related"""
         queryset = Recipe.objects.select_related('author').prefetch_related(
-            'tags', 
+            'tags',
             'ingredients',
             'recipe_ingredients__ingredient'
         )
@@ -64,7 +64,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             if created:
                 from .serializers import RecipeShortSerializer
                 serializer = RecipeShortSerializer(recipe)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.data,
+                                status=status.HTTP_201_CREATED)
             return Response(
                 {'errors': 'Рецепт уже в избранном'},
                 status=status.HTTP_400_BAD_REQUEST
