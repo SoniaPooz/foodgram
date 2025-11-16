@@ -18,7 +18,10 @@ if response.status_code == 200:
 
         # 2. Пробуем добавить в корзину
         print("\n2. ДОБАВЛЯЕМ В КОРЗИНУ")
-        response = requests.post(f"{BASE_URL}/recipes/{recipe_id}/shopping_cart/", headers=headers)
+        response = requests.post(
+            f"{BASE_URL}/recipes/{recipe_id}/shopping_cart/",
+            headers=headers
+        )
         print(f"Статус: {response.status_code}")
         print(f"Ответ: {response.text}")
 

@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
-from .models import Recipe, Ingredient
+from .models import Recipe, Ingredient, Tag
 
 User = get_user_model()
 
@@ -86,7 +86,9 @@ class RecipeAPITestCase(APITestCase):
 
     def test_add_to_shopping_cart(self):
         """Тест добавления в список покупок"""
-        response = self.client.post(f'/api/recipes/{self.recipe.id}/shopping_cart/')
+        response = self.client.post(
+            f'/api/recipes/{self.recipe.id}/shopping_cart/'
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -107,5 +109,7 @@ class UserAPITestCase(APITestCase):
 
     def test_subscribe(self):
         """Тест подписки на пользователя"""
-        response = self.client.post(f'/api/users/{self.user2.username}/subscribe/')
+        response = self.client.post(
+            f'/api/users/{self.user2.username}/subscribe/'
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

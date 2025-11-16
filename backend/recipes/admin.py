@@ -3,6 +3,7 @@ from .models import (
     Tag, Ingredient, Recipe, RecipeIngredient, Favorite, ShoppingCart
 )
 
+
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
     extra = 1

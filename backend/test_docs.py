@@ -11,7 +11,10 @@ docs_urls = [
 for url in docs_urls:
     try:
         response = requests.get(url, timeout=5)
-        status = " Доступен" if response.status_code == 200 else f" Код: {response.status_code}"
+        if response.status_code == 200:
+            status = " Доступен"
+        else:
+            status = f" Код: {response.status_code}"
         print(f"{url}: {status}")
     except Exception as e:
         print(f"{url}: Ошибка - {e}")

@@ -20,7 +20,8 @@ all_working = True
 for name, endpoint in endpoints:
     try:
         start_time = time.time()
-        response = requests.get(f"{BASE_URL}{endpoint}", headers=headers, timeout=10)
+        response = requests.get(f"{BASE_URL}{endpoint}",
+                                headers=headers, timeout=10)
         end_time = time.time()
         response_time = (end_time - start_time) * 1000
 

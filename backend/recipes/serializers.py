@@ -3,6 +3,7 @@ from .models import (
     Tag, Ingredient, Recipe, RecipeIngredient, Favorite, ShoppingCart
 )
 
+
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
