@@ -1,29 +1,24 @@
-volumes:
-  food_data:
-  static_data:
+version: '3.8'
 
 services:
-  food_db:
-    image: postgres:13.10
-    env_file: .env
+  db:
+    image: postgres:13.0
+    environment:
+      POSTGRES_DB: foodgram
+      POSTGRES_USER: foodgram_user
+      POSTGRES_PASSWORD: foodgram_password
     volumes:
-      - food_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data/
+
   backend:
-    build: ./backend/
-    env_file: .env
+    build: ./backend
+    environment:
+      DB_HOST: db
+      DB_NAME: foodgram
+      DB_USER: foodgram_user
+      DB_PASSWORD: foodgram_password
     depends_on:
-      - food_db
-    volumes:
-      - static_data:/backend_static
-  frontend:
-    env_file: .env
-    build: ./frontend/
-    command: cp -r /app/build/. /frontend_static/
-    volumes:
-      - static_data:/frontend_static
-  gateway:
-    build: ./nginx/
-    volumes:
-      - static_data:/staticfiles/
-    ports:
-      - 8000:80
+      - db
+
+volumes:
+  postgres_data:
