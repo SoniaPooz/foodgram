@@ -4,6 +4,7 @@ from recipes.models import Recipe, Tag, Ingredient, RecipeIngredient
 
 User = get_user_model()
 
+
 class Command(BaseCommand):
     help = 'Создает тестовые рецепты для сайта'
 
@@ -38,10 +39,8 @@ class Command(BaseCommand):
             eggs = Ingredient.objects.get(name__icontains='яйцо')
             milk = Ingredient.objects.get(name__icontains='молоко')
             sugar = Ingredient.objects.get(name__icontains='сахар')
-            salt = Ingredient.objects.get(name__icontains='соль')
             tomato = Ingredient.objects.get(name__icontains='помидор')
             cheese = Ingredient.objects.get(name__icontains='сыр')
-            oil = Ingredient.objects.get(name__icontains='масло подсолнечное')
             chicken = Ingredient.objects.get(name__icontains='куриное филе')
             rice = Ingredient.objects.get(name__icontains='рис')
             onion = Ingredient.objects.get(name__icontains='лук репчатый')
