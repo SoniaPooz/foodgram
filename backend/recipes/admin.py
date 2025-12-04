@@ -25,17 +25,16 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'favorite_count', 'cooking_time',
-                    'pub_date')
+    list_display = ('name', 'author', 'favorite_count', 'cooking_time', 'pub_date')
     search_fields = ('name', 'author__username', 'author__email', 'text')
     list_filter = ('tags', 'pub_date')
     inlines = (RecipeIngredientInline,)
-
+    
     def get_queryset(self, request):
         from django.db.models import Count
         queryset = super().get_queryset(request)
         return queryset.annotate(favorite_count_value=Count('favorites'))
-
+    
     def favorite_count(self, obj):
         return obj.favorite_count_value
     favorite_count.admin_order_field = 'favorite_count_value'

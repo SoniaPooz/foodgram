@@ -6,8 +6,8 @@ User = get_user_model()
 
 class Tag(models.Model):
     name = models.CharField('Название', max_length=200, unique=True)
-    color = models.CharField('Цвет в HEX', max_length=7, unique=True)
-    slug = models.SlugField('Уникальный слаг', max_length=200, unique=True)
+    color = models.CharField('Цвет', max_length=7, unique=True)
+    slug = models.SlugField('Слаг', max_length=200, unique=True)
 
     class Meta:
         verbose_name = 'Тег'
@@ -37,18 +37,15 @@ class Recipe(models.Model):
         verbose_name='Автор'
     )
     name = models.CharField('Название', max_length=200)
-    image = models.ImageField('Картинка', upload_to='recipes/')
+    image = models.ImageField('Изображение', upload_to='recipes/')
     text = models.TextField('Описание')
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
         verbose_name='Ингредиенты'
     )
-    tags = models.ManyToManyField(
-        Tag,
-        verbose_name='Теги'
-    )
-    cooking_time = models.PositiveIntegerField('Время приготовления в минутах')
+    tags = models.ManyToManyField(Tag, verbose_name='Теги')
+    cooking_time = models.PositiveIntegerField('Время приготовления')
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
 
     class Meta:
@@ -68,17 +65,13 @@ class RecipeIngredient(models.Model):
     )
     ingredient = models.ForeignKey(
         Ingredient,
-        on_delete=models.CASCADE,
-        verbose_name='Ингредиент'
+        on_delete=models.CASCADE
     )
     amount = models.PositiveIntegerField('Количество')
 
     class Meta:
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецептах'
-
-    def __str__(self):
-        return f'{self.ingredient} в {self.recipe}'
 
 
 class Favorite(models.Model):
@@ -90,10 +83,7 @@ class Favorite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='in_favorites'
-    )
-    added_at = models.DateTimeField(
-        auto_now_add=True
+        related_name='favorites'
     )
 
     class Meta:
@@ -103,9 +93,8 @@ class Favorite(models.Model):
                 name='unique_favorite'
             )
         ]
-
-    def __str__(self):
-        return f'{self.user} -> {self.recipe}'
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранное'
 
 
 class ShoppingCart(models.Model):
@@ -121,14 +110,11 @@ class ShoppingCart(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Список покупок'
-        verbose_name_plural = 'Списки покупок'
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
                 name='unique_shopping_cart'
             )
         ]
-
-    def __str__(self):
-        return f'{self.user} добавил в покупки {self.recipe}'
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'

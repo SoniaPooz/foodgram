@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13.0
+    environment:
+      POSTGRES_DB: foodgram
+      POSTGRES_USER: foodgram_user
+      POSTGRES_PASSWORD: foodgram_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  backend:
+    build: ./backend
+    environment:
+      DB_HOST: db
+      DB_NAME: foodgram
+      DB_USER: foodgram_user
+      DB_PASSWORD: foodgram_password
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

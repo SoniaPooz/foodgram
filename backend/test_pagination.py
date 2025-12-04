@@ -1,7 +1,11 @@
+"""Manual API pagination tests."""
 import requests
 
 BASE_URL = "http://127.0.0.1:8000/api/recipes"
-headers = {"Authorization": "Token 58cb43038b282e236b63b5c15b243c048db67bca"}
+headers = {
+    "Authorization": "Token 58cb43038b282e236b63b5c15b243c048db67bca"
+}
+
 
 print("=== ТЕСТИРУЕМ ПАГИНАЦИЮ ===")
 
@@ -34,7 +38,7 @@ tags_url = "http://127.0.0.1:8000/api/tags"
 response = requests.get(f"{tags_url}/", headers=headers)
 if response.status_code == 200:
     tags = response.json()
-    print(f"Тегов: {len(tags)} (должен быть список)")
+    print(f"Тегов: {len(tags)} (должен быть список, не объект пагинации)")
 
 # 4. Ингредиенты без пагинации
 print("\n4. ИНГРЕДИЕНТЫ (БЕЗ ПАГИНАЦИИ)")

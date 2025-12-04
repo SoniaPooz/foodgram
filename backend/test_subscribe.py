@@ -1,7 +1,11 @@
+"""Manual API subscription tests."""
 import requests
 
 BASE_URL = "http://127.0.0.1:8000/api/users"
-headers = {"Authorization": "Token 58cb43038b282e236b63b5c15b243c048db67bca"}
+headers = {
+    "Authorization": "Token 58cb43038b282e236b63b5c15b243c048db67bca"
+}
+
 
 print("=== ТЕСТИРУЕМ ПОДПИСКИ ===")
 
@@ -17,8 +21,8 @@ if response.status_code == 200:
         print(f"Автор для подписки: {author_username}")
 
         print("2. ПОДПИСЫВАЕМСЯ НА ДРУГОГО АВТОРА")
-        response = requests.post(f"{BASE_URL}/{author_username}/subscribe/",
-                                 headers=headers)
+        subscribe_url = f"{BASE_URL}/{author_username}/subscribe/"
+        response = requests.post(subscribe_url, headers=headers)
         print("Статус:", response.status_code)
         if response.status_code == 201:
             print("Успешно подписались!")
@@ -37,8 +41,7 @@ if response.status_code == 200:
             print(f"Количество подписок: {len(results)}")
 
         print("4. ОТПИСЫВАЕМСЯ ОТ АВТОРА")
-        response = requests.delete(f"{BASE_URL}/{author_username}/subscribe/",
-                                   headers=headers)
+        response = requests.delete(subscribe_url, headers=headers)
         print("Статус:", response.status_code)
         if response.status_code == 204:
             print("Успешно отписались!")
