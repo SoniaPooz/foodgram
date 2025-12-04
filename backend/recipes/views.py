@@ -131,7 +131,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def download_shopping_cart(self, request):
         from django.http import HttpResponse
         from django.db.models import Sum, F
-        from .models import ShoppingCart, RecipeIngredient
+        from .models import RecipeIngredient
 
         ingredients = RecipeIngredient.objects.filter(
             recipe__shopping_cart__user=request.user
@@ -156,13 +156,15 @@ class RecipeViewSet(viewsets.ModelViewSet):
             amount = item['total_amount']
             if amount % 1 == 0:
                 amount = int(amount)
-            
+
             shopping_list += f"{i}. {item['name']} - {amount} {item['unit']}\n"
 
         shopping_list += "\n" + "=" * 40 + "\n"
         shopping_list += f"Итого: {len(ingredients)} позиций\n"
-        shopping_list += f"Сгенерировано: {timezone.now().strftime('%d.%m.%Y %H:%M')}"
-        
+        shopping_list += (
+            f"Сгенерировано: {timezone.now().strftime('%d.%m.%Y %H:%M')}"
+        )
+
         response = HttpResponse(
             shopping_list,
             content_type='text/plain; charset=utf-8'
