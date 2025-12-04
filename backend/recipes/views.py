@@ -43,6 +43,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             'ingredients',
             'recipe_ingredients__ingredient'
         )
+        queryset = queryset.order_by('-pub_date')
         return queryset
 
     def perform_create(self, serializer):
@@ -129,46 +130,39 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         from django.http import HttpResponse
+        from django.db.models import Sum, F
         from .models import ShoppingCart, RecipeIngredient
-        from collections import defaultdict
 
-        user_cart = ShoppingCart.objects.filter(user=request.user)
+        ingredients = RecipeIngredient.objects.filter(
+            recipe__shopping_cart__user=request.user
+        ).values(
+            name=F('ingredient__name'),
+            unit=F('ingredient__measurement_unit')
+        ).annotate(
+            total_amount=Sum('amount')
+        ).order_by('ingredient__name')
 
-        if not user_cart.exists():
+        if not ingredients:
             return HttpResponse(
                 "Ваш список покупок пуст!\n"
                 "Добавьте рецепты в список покупок.",
                 content_type='text/plain; charset=utf-8'
             )
 
-        ingredient_totals = defaultdict(float)
-        ingredient_units = {}
+        shopping_list = "СПИСОК ПОКУПОК\n"
+        shopping_list += "=" * 40 + "\n\n"
 
-        for cart_item in user_cart:
-            recipe = cart_item.recipe
-            recipe_ingredients = RecipeIngredient.objects.filter(
-                recipe=recipe
-            )
+        for i, item in enumerate(ingredients, 1):
+            amount = item['total_amount']
+            if amount % 1 == 0:
+                amount = int(amount)
+            
+            shopping_list += f"{i}. {item['name']} - {amount} {item['unit']}\n"
 
-            for ri in recipe_ingredients:
-                ingredient_name = ri.ingredient.name
-                ingredient_totals[ingredient_name] += ri.amount
-                ingredient_units[ingredient_name] = (
-                    ri.ingredient.measurement_unit
-                )
-
-        shopping_list = "СПИСОК ПОКУПОК\n\n"
-        for i, (ingredient, amount) in enumerate(
-            ingredient_totals.items(), 1
-        ):
-            unit = ingredient_units[ingredient]
-            shopping_list += f"{i}. {ingredient} - {amount} {unit}\n"
-
-        shopping_list += (
-            f"\nИтого: {len(ingredient_totals)} позиций\n"
-            f"Сгенерировано: {timezone.now().strftime('%d.%m.%Y %H:%M')}"
-        )
-
+        shopping_list += "\n" + "=" * 40 + "\n"
+        shopping_list += f"Итого: {len(ingredients)} позиций\n"
+        shopping_list += f"Сгенерировано: {timezone.now().strftime('%d.%m.%Y %H:%M')}"
+        
         response = HttpResponse(
             shopping_list,
             content_type='text/plain; charset=utf-8'

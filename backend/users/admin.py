@@ -11,9 +11,10 @@ admin.site.unregister(User)
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name')
-    search_fields = ('username', 'email')
-    list_filter = ('username', 'email')
+    list_display = ('username', 'email', 'first_name', 'last_name',
+                    'is_staff', 'date_joined')
+    search_fields = ('username', 'email', 'first_name', 'last_name')
+    list_filter = ('is_staff', 'is_active', 'date_joined')
 
 
 @admin.register(Subscribe)

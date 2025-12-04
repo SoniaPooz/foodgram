@@ -20,22 +20,26 @@ class TagAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     search_fields = ('name',)
-    list_filter = ('name',)
+    list_filter = ('measurement_unit',)
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author', 'cooking_time', 'pub_date')
-    search_fields = ('name', 'author__username', 'author__email')
+    list_display = ('name', 'author', 'favorite_count', 'cooking_time',
+                    'pub_date')
+    search_fields = ('name', 'author__username', 'author__email', 'text')
     list_filter = ('tags', 'pub_date')
     inlines = (RecipeIngredientInline,)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('favorites')
+        from django.db.models import Count
+        queryset = super().get_queryset(request)
+        return queryset.annotate(favorite_count_value=Count('favorites'))
 
     def favorite_count(self, obj):
-        return obj.favorites.count()
-    favorite_count.short_description = 'Добавлений в избранное'
+        return obj.favorite_count_value
+    favorite_count.admin_order_field = 'favorite_count_value'
+    favorite_count.short_description = 'В избранном'
 
 
 @admin.register(Favorite)
